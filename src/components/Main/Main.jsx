@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "./components/Card/Card";
 import EditAvatar from "./components/forms/Avatar/EditAvatar";
 import EditProfile from "./components/forms/EditProfile/EditProfile";
@@ -10,36 +10,39 @@ import EditProfileInfo from "../../images/Vector_edit_profile.svg";
 import EditButton from "../../images/edit-button.svg";
 import AddImage from "../../images/Vector_plus.svg";
 import ImagePopup from "./components/forms/ImagePopup/ImagePopup";
+import api from "../Api";
 
-const cards = [
-  {
-    isLiked: false,
-    _id: "5d1f0611d321eb4bdcd707dd",
-    name: "Yosemite Valley",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:10:57.741Z",
-  },
-  {
-    isLiked: false,
-    _id: "5d1f064ed321eb4bdcd707de",
-    name: "Lake Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:11:58.324Z",
-  },
-];
+// const cards = [
+//   {
+//     isLiked: false,
+//     _id: "5d1f0611d321eb4bdcd707dd",
+//     name: "Yosemite Valley",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
+//     owner: "5d1f0611d321eb4bdcd707dd",
+//     createdAt: "2019-07-05T08:10:57.741Z",
+//   },
+//   {
+//     isLiked: false,
+//     _id: "5d1f064ed321eb4bdcd707de",
+//     name: "Lake Louise",
+//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
+//     owner: "5d1f0611d321eb4bdcd707dd",
+//     createdAt: "2019-07-05T08:11:58.324Z",
+//   },
+// ];
 
 export default function Main() {
   const [popupType, setPopupType] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
 
   const avatarPopupTypes = {
     children: <EditAvatar />,
   };
 
   const profilePopupTypes = {
-    children: <EditProfile />,
+    children: <EditProfile currentUser={currentUser} />,
   };
 
   const newCardPopupTypes = {
@@ -55,13 +58,20 @@ export default function Main() {
     setSelectedCard(null);
   };
 
+  useEffect(() => {
+    api.getAppInfo().then(([remoteUser, remoteCards]) => {
+      setCards(remoteCards);
+      setCurrentUser(remoteUser);
+    });
+  }, []);
+
   return (
     <>
       <main className="content">
         <section className="profile">
           <div className="profile-avatar">
             <img
-              src={AvatarImage}
+              src={currentUser.avatar || AvatarImage}
               alt="imagen del perfil"
               className="profile-avatar__image"
             />
@@ -75,7 +85,7 @@ export default function Main() {
           <div className="profile-info">
             <div className="profile-info__name-and-button">
               <p className="profile-info__name profile-info__name_text_overflow">
-                Eduardo Crux
+                {currentUser.name || "Nombre del usuario"}
               </p>
               <button
                 className="profile-info__edit-button"
@@ -89,7 +99,7 @@ export default function Main() {
               </button>
             </div>
             <p className="profile-info__about profile-info__about_text_overflow">
-              Explorador
+              {currentUser.about || "Acerca de mi"}
             </p>
           </div>
           <button
