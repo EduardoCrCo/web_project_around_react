@@ -1,11 +1,11 @@
-import Vector from "../../images/Vector.svg";
+import Logo from "../../images/logo.svg";
 import Line from "../../images/Line.svg";
 
 export default function Header() {
   return (
     <header className="header">
       <img
-        src={Vector}
+        src={Logo}
         alt="imagen vectorial de encabezado"
         className="header__image"
       />

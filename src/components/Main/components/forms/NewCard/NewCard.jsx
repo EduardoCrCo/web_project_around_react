@@ -1,6 +1,37 @@
-export default function NewCard() {
+import { useRef, useEffect } from "react";
+import FormValidator from "../../../../FormValidator";
+
+export default function NewCard({ onAddPlaceSubmit }) {
+  const formRef = useRef();
+
+  useEffect(() => {
+    const form = document.querySelector(".form_place");
+
+    const formValidator = new FormValidator(form, {
+      formSelector: ".form",
+      inputSelector: ".form__input",
+      submitButtonSelector: ".form__submit",
+      inactiveButtonClass: "button_inactive",
+      inputErrorClass: "form__input_type_error",
+      errorClass: "form__input-error_active",
+    });
+    formValidator.enableValidation();
+  }, []);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const name = formRef.current.name.value;
+    const link = formRef.current.link.value;
+    onAddPlaceSubmit({ name, link });
+  };
+
   return (
-    <form className="form form_place" noValidate>
+    <form
+      className="form form_place"
+      ref={formRef}
+      onSubmit={handleSubmit}
+      noValidate
+    >
       <h3 className="edit-profile">Nuevo Lugar</h3>
       <fieldset className="form__fieldset">
         <input

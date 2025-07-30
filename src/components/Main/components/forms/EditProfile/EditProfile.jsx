@@ -1,13 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
+import CurrentUserContext from "../../../../../contexts/CurrentUserContext";
 import FormValidator from "../../../../FormValidator";
 
-export default function EditProfile({ currentUser }) {
-  const formRef = useRef();
-
+export default function EditProfile() {
   useEffect(() => {
-    const formElement = formRef.current;
-    // const formElement = document.querySelector(".form_profile");
-    const formValidator = new FormValidator(formElement, {
+    const form = document.querySelector(".form_profile");
+    const formValidator = new FormValidator(form, {
       formSelector: ".form",
       inputSelector: ".form__input",
       submitButtonSelector: ".form__submit",
@@ -18,8 +16,27 @@ export default function EditProfile({ currentUser }) {
     formValidator.enableValidation();
   }, []);
 
+  const userContext = useContext(CurrentUserContext);
+  const { currentUser, handleUpdateUser } = userContext;
+
+  const [name, setName] = useState(currentUser.name);
+  const [about, setAbout] = useState(currentUser.about);
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleAboutChange = (event) => {
+    setAbout(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleUpdateUser({ name, about });
+  };
+
   return (
-    <form ref={formRef} className="form form_profile" noValidate>
+    <form className="form form_profile" noValidate onSubmit={handleSubmit}>
       <h3 className="edit-profile">Editar perfil</h3>
       <fieldset className="form__fieldset">
         <input
@@ -28,10 +45,11 @@ export default function EditProfile({ currentUser }) {
           id="input-name"
           className="form__input form__input-name"
           placeholder="Nombre"
+          required
+          onChange={handleNameChange}
           minLength="2"
           maxLength="40"
-          required
-          defaultValue={currentUser.name || ""}
+          value={name}
         />
         <span className="input-name-error"></span>
         <input
@@ -41,9 +59,10 @@ export default function EditProfile({ currentUser }) {
           className="form__input form__input-about"
           placeholder="Acerca de mi"
           required
+          onChange={handleAboutChange}
           minLength="2"
           maxLength="200"
-          defaultValue={currentUser.about || ""}
+          value={about}
         />
         <span className="input-About-error"></span>
       </fieldset>

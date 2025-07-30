@@ -18,3 +18,13 @@ Se comenzó a hacer la transferencias del marcado Html a jsx, para desplegar la 
 se crearon los directorios y archivos correspondientes junto con sus componentes funcionales adecuados para cada componente.
 
 se hicieron las configuariones necesarias para abrir los popups de los formularios y el de las imagenes de las tarjetas.
+
+---------------sprint 14-----------------------------
+
+En este sprint, continuamos con la refactorizacion del proyecto, agregando la funcionalidad de los componentes utilizando programacion declarativa,y de acuerdo al brief.
+
+se implemento useContext, useState, useEffect, useRef para la correcta funcionalidad de los componentes.
+
+conectamos el proyecto a la Api todas las funcionalidades requeridas estan trabajando: likes,dislikes. agregar, eliminar tarjetas, informacion del perfil, avatar
+
+se implemento la validacion de los formularios.
