@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import FormValidator from "../../../../FormValidator";
+import FormValidator from "../../../../../utils/FormValidator";
 
 export default function NewCard({ onAddPlaceSubmit }) {
   const formRef = useRef();
